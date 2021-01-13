@@ -140,5 +140,7 @@ VOLUME /usr/src/redmine/files
 COPY docker-entrypoint.sh /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-EXPOSE 3000
-CMD ["rails", "server", "-b", "0.0.0.0"]
+ENV SIDEKIQ_PIDFILE tmp/pids/server.pid
+
+CMD ["bundle exec sidekiq"]
+
