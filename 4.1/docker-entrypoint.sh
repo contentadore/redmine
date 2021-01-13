@@ -165,4 +165,16 @@ if [ -n "$isLikelyRedmine" ]; then
 	fi
 fi
 
-exec "$@"
+gosu redmine gem install sidekiq
+#gosu redmine gem install pg 
+#gosu redmine gem install activerecord-postgres-adapter 
+
+gosu redmine bundle install
+
+#export DATABASE_URL=postgres://${POSTGRES_ENV_POSTGRES_USER:-postgres}:${POSTGRES_ENV_POSTGRES_PASSWORD}/${POSTGRES_ENV_POSTGRES_DB:-${REDMINE_DB_USERNAME:-}}
+#export SECRET_KEY_BASE={$REDMINE_SECRET_KEY_BASE}
+
+gosu redmine /bin/bash -lc '/usr/local/bin/bundle exec sidekiq -e production' 
+
+#exec "$@"
+
